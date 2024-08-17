@@ -77,9 +77,9 @@ const request = async <Response>(
 	} = body instanceof FormData ? {} : { "Content-Type": "application/json" };
 
 	if (isClient) {
-		const accsessToken = localStorage.getItem("accsessToken");
-		if (accsessToken) {
-			baseHeader.Authorization = `Bearer ${accsessToken}`;
+		const accessToken = localStorage.getItem("accessToken");
+		if (accessToken) {
+			baseHeader.Authorization = `Bearer ${accessToken}`;
 		}
 	}
 
@@ -139,23 +139,23 @@ const request = async <Response>(
 						await clientLogoutRequest;
 					} catch (error) {
 					} finally {
-						localStorage.removeItem("accsessToken");
+						localStorage.removeItem("accessToken");
 						localStorage.removeItem("refreshToken");
 						clientLogoutRequest = null;
 						// Redirect về trang login có thể dẫn đến loop vô hạn
 						// Nếu không xử lý đúng cách
-						// vì nếu rơi vào TH trang login, chúng ta có gọi các API cần accsessToken
-						// mà accsessToken đã bị xóa nó sẽ redirect về trang login và lại gọi API
+						// vì nếu rơi vào TH trang login, chúng ta có gọi các API cần accessToken
+						// mà accessToken đã bị xóa nó sẽ redirect về trang login và lại gọi API
 						location.href = "/login";
 					}
 				}
 			} else {
 				// server side
-				const accsessToken = (options?.headers as any)?.Authorization.split(
+				const accessToken = (options?.headers as any)?.Authorization.split(
 					"Bearer "
 				)[1];
 
-				redirect("/logout?accsessToken=" + accsessToken);
+				redirect("/logout?accessToken=" + accessToken);
 			}
 		}
 		throw new HttpError(data);
@@ -166,11 +166,11 @@ const request = async <Response>(
 		const normalizeUrl = normalizePath(url);
 		if (normalizeUrl === "api/auth/login") {
 			const { accessToken, refreshToken } = (payload as LoginResType).data;
-			localStorage.setItem("accsessToken", accessToken);
+			localStorage.setItem("accessToken", accessToken);
 			localStorage.setItem("refreshToken", refreshToken);
 		}
 		if (normalizeUrl === "api/auth/logout") {
-			localStorage.removeItem("accsessToken");
+			localStorage.removeItem("accessToken");
 			localStorage.removeItem("refreshToken");
 		}
 	}
