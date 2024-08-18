@@ -16,9 +16,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLoginMutation } from "../../../../queries/useAuth";
 import { toast } from "../../../../components/ui/use-toast";
 import { handleErrorApi } from "../../../../lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
 	const loginMutation = useLoginMutation();
+	const route = useRouter();
 
 	const form = useForm<LoginBodyType>({
 		resolver: zodResolver(LoginBody),
@@ -37,6 +39,7 @@ export default function LoginForm() {
 				title: "Đăng nhập thành công",
 				description: res.payload.message,
 			});
+			route.push("/manage/dashboard");
 		} catch (error) {
 			handleErrorApi({
 				error,
