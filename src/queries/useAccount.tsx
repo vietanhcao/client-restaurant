@@ -1,12 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import accountApiRequest from "../apiRequests/account";
 import { AccountResType } from "../schemaValidations/account.schema";
 
-export const useAccoutProfile = (
+export const useAccoutMe = (
 	onSuccess?: (data: AccountResType) => void
 ) => {
 	return useQuery({
-		queryKey: ["account-profile"],
+		queryKey: ["account-me"],
 		queryFn: () =>
 			accountApiRequest.me().then((res) => {
 				if (onSuccess) {
@@ -16,3 +16,10 @@ export const useAccoutProfile = (
 			}),
 	});
 };
+
+
+export const useUpdateMeMutation = () => {
+  return useMutation({
+    mutationFn: accountApiRequest.updateMe,
+  });
+}

@@ -13,12 +13,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useAccoutProfile } from "../../../queries/useAccount";
+import { useAccoutMe, useUpdateMeMutation } from "../../../queries/useAccount";
+import { useUploadMediaMutation } from "../../../queries/useMedia";
+import { toast } from "../../../components/ui/use-toast";
+import { handleErrorApi } from "../../../lib/utils";
 
 export default function UpdateProfileForm() {
 	const [file, setFile] = useState<File | null>(null);
 	const avataInputRef = useRef<HTMLInputElement>(null);
-	const { data } = useAccoutProfile();
+	const { data, refetch } = useAccoutMe();
+	const updateMeMutation = useUpdateMeMutation();
+	const uploadMediaMutation = useUploadMediaMutation();
 
 	const form = useForm<UpdateMeBodyType>({
 		resolver: zodResolver(UpdateMeBody),
@@ -44,10 +49,42 @@ export default function UpdateProfileForm() {
 		form.reset({ name, avatar: avatar ?? "" });
 	}, [data, form]);
 
+	const rest = () => {
+		form.reset();
+		setFile(null);
+	};
+
+	const onSubmit = async (values: UpdateMeBodyType) => {
+		if (updateMeMutation.isPending) return;
+		try {
+			let body = { ...values };
+			if (file) {
+				const formData = new FormData();
+				formData.append("file", file);
+				const uploadImageRes = await uploadMediaMutation.mutateAsync(formData);
+				const imageUrl = uploadImageRes.payload.data;
+				body.avatar = imageUrl;
+			}
+
+			const res = await updateMeMutation.mutateAsync(body);
+
+			toast({
+				description: res.payload.message,
+			});
+			refetch();
+		} catch (error) {
+			handleErrorApi({
+				error,
+				setError: form.setError,
+			});
+		}
+	};
+
 	return (
 		<Form {...form}>
 			<form
 				noValidate
+				onSubmit={form.handleSubmit(onSubmit, (errors) => console.log(errors))}
 				className="grid auto-rows-max items-start gap-4 md:gap-8"
 			>
 				<Card x-chunk="dashboard-07-chunk-0">
@@ -77,7 +114,10 @@ export default function UpdateProfileForm() {
 													const file = e.target.files?.[0];
 													if (file) {
 														setFile(file);
-														// form.setValue("avatar", file);
+														// fake url to past validate form
+														field.onChange(
+															"http://localhost:3000/" + file.name
+														);
 													}
 												}}
 											/>
@@ -114,7 +154,7 @@ export default function UpdateProfileForm() {
 							/>
 
 							<div className=" items-center gap-2 md:ml-auto flex">
-								<Button variant="outline" size="sm" type="reset">
+								<Button variant="outline" size="sm" type="reset" onClick={rest}>
 									Hủy
 								</Button>
 								<Button size="sm" type="submit">
