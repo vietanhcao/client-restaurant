@@ -3,17 +3,25 @@
 import { useEffect, useRef } from "react";
 import { useLogoutMutation } from "../../../../queries/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getRefreshTokenFromLocalStorage } from "../../../../lib/utils";
+import {
+	getAccessTokenFromLocalStorage,
+	getRefreshTokenFromLocalStorage,
+} from "../../../../lib/utils";
 
 export default function LogoutPage() {
 	const { mutateAsync } = useLogoutMutation();
 	const searchParams = useSearchParams();
 	const refreshToken = searchParams.get("refreshToken");
+	const accessToken = searchParams.get("accessToken");
 	const router = useRouter();
 	const ref = useRef<any>(null);
 	useEffect(() => {
 		// trick to prevent twice logout request and check exact refresh token
-		if (ref.current || refreshToken !== getRefreshTokenFromLocalStorage())
+		if (
+			ref.current ||
+			refreshToken !== getRefreshTokenFromLocalStorage() ||
+			accessToken !== getAccessTokenFromLocalStorage()
+		)
 			return;
 		ref.current = mutateAsync;
 
@@ -23,7 +31,7 @@ export default function LogoutPage() {
 			}, 1000);
 			router.push("/login");
 		});
-	}, [mutateAsync, refreshToken, router]);
+	}, [accessToken, mutateAsync, refreshToken, router]);
 
 	return (
 		<div className="min-h-screen flex items-center justify-center">

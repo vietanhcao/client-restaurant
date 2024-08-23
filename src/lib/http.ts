@@ -151,6 +151,7 @@ const request = async <Response>(
 				}
 			} else {
 				// server side
+				// accesstoken còn hạn và chúng ta gọi Nextjs server (Route handler và Server component) đến Server Backend
 				const accessToken = (options?.headers as any)?.Authorization.split(
 					"Bearer "
 				)[1];
