@@ -47,10 +47,14 @@ export const getAccessTokenFromLocalStorage = () => {
 	return isBrowser ? localStorage.getItem("accessToken") : null;
 };
 
-export const setAccessTokenToLocalStorage = (accessToken: string) => {
-	isBrowser ?? localStorage.setItem("accessToken", accessToken);
+export const setAccessTokenFromLocalStorage = (accessToken: string) => {
+	isBrowser && localStorage.setItem("accessToken", accessToken);
 };
 
 export const getRefreshTokenFromLocalStorage = () => {
 	return isBrowser ? localStorage.getItem("refreshToken") : null;
+};
+
+export const setRefreshTokenFromLocalStorage = (refreshToken: string) => {
+	isBrowser && localStorage.setItem("refreshToken", refreshToken);
 };
