@@ -53,6 +53,7 @@ export default function LoginForm() {
 				title: "Đăng nhập thành công",
 				description: res.payload.message,
 			});
+			setIsAuth(true);
 			route.push("/manage/dashboard");
 		} catch (error) {
 			handleErrorApi({

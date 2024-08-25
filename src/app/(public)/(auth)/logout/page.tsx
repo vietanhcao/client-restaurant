@@ -7,9 +7,11 @@ import {
 	getAccessTokenFromLocalStorage,
 	getRefreshTokenFromLocalStorage,
 } from "../../../../lib/utils";
+import { useAppConext } from "../../../../components/app-provider";
 
 export default function LogoutPage() {
 	const { mutateAsync } = useLogoutMutation();
+	const { setIsAuth } = useAppConext();
 	const searchParams = useSearchParams();
 	const refreshToken = searchParams.get("refreshToken");
 	const accessToken = searchParams.get("accessToken");
@@ -34,6 +36,7 @@ export default function LogoutPage() {
 			setTimeout(() => {
 				ref.current = null;
 			}, 1000);
+			setIsAuth(false);
 			router.push("/login");
 		});
 	}, [accessToken, mutateAsync, refreshToken, router]);
