@@ -12,7 +12,9 @@ export function middleware(request: NextRequest) {
 
 	// Not authenticated and trying to access a private page, redirect them to the login page
 	if (privatePaths.some((path) => pathname.startsWith(path)) && !refreshToken) {
-		return NextResponse.redirect(new URL("/login", request.url));
+		const url = new URL("/login", request.url);
+		url.searchParams.set("clearTokens", "true");
+		return NextResponse.redirect(url);
 	}
 
 	// If the user is authenticated and tries to access a public page, redirect them to the dashboard

@@ -17,12 +17,17 @@ export default function LogoutPage() {
 	const ref = useRef<any>(null);
 	useEffect(() => {
 		// trick to prevent twice logout request and check exact refresh token
+		if (ref.current) {
+			return;
+		}
 		if (
 			ref.current ||
 			refreshToken !== getRefreshTokenFromLocalStorage() ||
 			accessToken !== getAccessTokenFromLocalStorage()
-		)
+		) {
+			router.push("/login");
 			return;
+		}
 		ref.current = mutateAsync;
 
 		mutateAsync().then((res) => {

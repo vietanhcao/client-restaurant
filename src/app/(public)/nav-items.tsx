@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { getAccessTokenFromLocalStorage } from "../../lib/utils";
 import { use, useEffect, useState } from "react";
+import { useAppConext } from "../../components/app-provider";
 
 const menuItems = [
 	{
@@ -27,11 +28,7 @@ const menuItems = [
 ];
 
 export default function NavItems({ className }: { className?: string }) {
-	const [isAuth, setIsAuth] = useState(false);
-
-	useEffect(() => {
-		setIsAuth(Boolean(getAccessTokenFromLocalStorage()));
-	}, []);
+	const { isAuth } = useAppConext();
 
 	return menuItems.map((item) => {
 		if (item.authRequired === false && isAuth) {
