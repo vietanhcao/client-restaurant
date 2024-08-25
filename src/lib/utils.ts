@@ -61,6 +61,11 @@ export const setRefreshTokenFromLocalStorage = (refreshToken: string) => {
 	isBrowser && localStorage.setItem("refreshToken", refreshToken);
 };
 
+export const removeTokensFromLocalStorage = () => {
+	isBrowser && localStorage.removeItem("accessToken");
+	isBrowser && localStorage.removeItem("refreshToken");
+};
+
 export const checkAndRefreshToken = async (param?: {
 	onError?: () => void;
 	onSuccess?: () => void;
@@ -78,9 +83,14 @@ export const checkAndRefreshToken = async (param?: {
 	};
 	// Thời điểm hết hạn của token là tính theo epoch time
 	// new Date().getTime() epoch time (ms)
-	const now = Math.round(new Date().getTime() / 1000);
-	// Trường hợp refresh token hết hạn không xử lý
-	if (decodedRefreshToken.exp < now) return;
+	// trường hợp bị lệch so với khi set cookie
+	const now =  (new Date().getTime() / 1000) - 1
+	// Trường hợp refresh token hết hạn  xử lý logout xóa token
+	if (decodedRefreshToken.exp < now) {
+		removeTokensFromLocalStorage();
+		param?.onError && param.onError();
+		return;
+	}
 	// Còn 1/3 thời gian hết hạn của access token thì refresh token
 	// thời gian còn lại công thức: decodedAccessToken.exp - now
 	// thời gian hết hạn của access token: decodedAccessToken.exp - decodedAccessToken.iat

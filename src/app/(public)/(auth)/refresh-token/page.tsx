@@ -27,6 +27,11 @@ export default function RefreshTokenPage() {
         ref.current = null;
 				router.push(redirectPath ?? "/");
 			},
+      onError: () => {
+        // trường hợp 404
+        ref.current = null;
+        router.push("/login");
+      },
 		});
 	}, [redirectPath, refreshToken, router]);
 
