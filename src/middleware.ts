@@ -21,12 +21,14 @@ export function middleware(request: NextRequest) {
 	}
 
 	//  If the user has accessToken expried and tries to access a private page, redirect them to the logout page
-	if (privatePaths.some((path) => pathname.startsWith(path)) && !accessToken && refreshToken) {
-		const url = new URL("/logout", request.url);
-		url.searchParams.set(
-			"refreshToken",
-			refreshToken ?? ""
-		);
+	if (
+		privatePaths.some((path) => pathname.startsWith(path)) &&
+		!accessToken &&
+		refreshToken
+	) {
+		const url = new URL("/refresh-token", request.url);
+		url.searchParams.set("refreshToken", refreshToken ?? "");
+		url.searchParams.set("redirect", pathname);
 
 		return NextResponse.redirect(url);
 	}
