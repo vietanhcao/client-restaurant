@@ -49,7 +49,7 @@ export default function UpdateProfileForm() {
 		form.reset({ name, avatar: avatar ?? undefined });
 	}, [data, form]);
 
-	const rest = () => {
+	const reset = () => {
 		form.reset();
 		setFile(null);
 	};
@@ -154,7 +154,7 @@ export default function UpdateProfileForm() {
 							/>
 
 							<div className=" items-center gap-2 md:ml-auto flex">
-								<Button variant="outline" size="sm" type="reset" onClick={rest}>
+								<Button variant="outline" size="sm" type="reset" onClick={reset}>
 									Hủy
 								</Button>
 								<Button size="sm" type="submit">
