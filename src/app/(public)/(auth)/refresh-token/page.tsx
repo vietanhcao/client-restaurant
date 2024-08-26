@@ -1,13 +1,13 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import {
 	checkAndRefreshToken,
 	getRefreshTokenFromLocalStorage,
 } from "../../../../lib/utils";
 
-export default function RefreshTokenPage() {
+function RefreshToken() {
 	const searchParams = useSearchParams();
 	const refreshToken = searchParams.get("refreshToken");
 	const redirectPath = searchParams.get("redirect");
@@ -24,14 +24,14 @@ export default function RefreshTokenPage() {
 		ref.current = checkAndRefreshToken;
 		checkAndRefreshToken({
 			onSuccess: () => {
-        ref.current = null;
+				ref.current = null;
 				router.push(redirectPath ?? "/");
 			},
-      onError: () => {
-        // trường hợp 404
-        ref.current = null;
-        router.push("/login");
-      },
+			onError: () => {
+				// trường hợp 404
+				ref.current = null;
+				router.push("/login");
+			},
 		});
 	}, [redirectPath, refreshToken, router]);
 
@@ -39,5 +39,13 @@ export default function RefreshTokenPage() {
 		<div className="min-h-screen flex items-center justify-center">
 			Refresh token...
 		</div>
+	);
+}
+
+export default function RefreshTokenPage() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<RefreshToken />
+		</Suspense>
 	);
 }

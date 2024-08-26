@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { useLogoutMutation } from "../../../../queries/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -9,7 +9,7 @@ import {
 } from "../../../../lib/utils";
 import { useAppConext } from "../../../../components/app-provider";
 
-export default function LogoutPage() {
+function Logout() {
 	const { mutateAsync } = useLogoutMutation();
 	const { setIsAuth } = useAppConext();
 	const searchParams = useSearchParams();
@@ -39,11 +39,19 @@ export default function LogoutPage() {
 			setIsAuth(false);
 			router.push("/login");
 		});
-	}, [accessToken, mutateAsync, refreshToken, router]);
+	}, [accessToken, mutateAsync, refreshToken, router, setIsAuth]);
 
 	return (
 		<div className="min-h-screen flex items-center justify-center">
 			LogoutPage
 		</div>
+	);
+}
+
+export default function LogoutPage() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<Logout />
+		</Suspense>
 	);
 }
