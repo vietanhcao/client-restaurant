@@ -37,10 +37,17 @@ export const useGetAccountList = () => {
 	});
 };
 
-export const useGetAccount = ({ id }: { id: number }) => {
+export const useGetAccount = ({
+	id,
+	enabled,
+}: {
+	id: number;
+	enabled: boolean;
+}) => {
 	return useQuery({
-		queryKey: ["account", id],
+		queryKey: ["accounts", id],
 		queryFn: () => accountApiRequest.getEmployee(id),
+		enabled,
 	});
 };
 
@@ -51,6 +58,7 @@ export const useAddAccountMutation = () => {
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["accounts"],
+				exact: true,
 			});
 		},
 	});
@@ -67,6 +75,7 @@ export const useUpdateAccountMutation = () => {
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["accounts"],
+				exact: true,
 			});
 		},
 	});
@@ -79,7 +88,8 @@ export const useDeleteAccountMutation = () => {
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["accounts"],
+				exact: true,
 			});
 		},
 	});
-}
+};
