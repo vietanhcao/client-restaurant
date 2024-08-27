@@ -55,7 +55,7 @@ import { useSearchParams } from "next/navigation";
 import AutoPagination from "@/components/auto-pagination";
 import {
 	useDeleteAccountMutation,
-	useGetAccountList,
+	useGetAccountListQuery,
 } from "../../../queries/useAccount";
 import { toast } from "../../../components/ui/use-toast";
 import { handleErrorApi } from "../../../lib/utils";
@@ -217,7 +217,7 @@ export default function AccountTable() {
 	const [employeeDelete, setEmployeeDelete] = useState<AccountItem | null>(
 		null
 	);
-	const accountListQuery = useGetAccountList();
+	const accountListQuery = useGetAccountListQuery();
 	const data = accountListQuery.data?.payload.data ?? [];
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);

@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useAccoutMe, useUpdateMeMutation } from "../../../queries/useAccount";
+import { useAccoutMeQuery, useUpdateMeMutation } from "../../../queries/useAccount";
 import { useUploadMediaMutation } from "../../../queries/useMedia";
 import { toast } from "../../../components/ui/use-toast";
 import { handleErrorApi } from "../../../lib/utils";
@@ -21,7 +21,7 @@ import { handleErrorApi } from "../../../lib/utils";
 export default function UpdateProfileForm() {
 	const [file, setFile] = useState<File | null>(null);
 	const avataInputRef = useRef<HTMLInputElement>(null);
-	const { data, refetch } = useAccoutMe();
+	const { data, refetch } = useAccoutMeQuery();
 	const updateMeMutation = useUpdateMeMutation();
 	const uploadMediaMutation = useUploadMediaMutation();
 

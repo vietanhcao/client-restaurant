@@ -5,7 +5,7 @@ import {
 	UpdateEmployeeAccountBodyType,
 } from "../schemaValidations/account.schema";
 
-export const useAccoutMe = (onSuccess?: (data: AccountResType) => void) => {
+export const useAccoutMeQuery = (onSuccess?: (data: AccountResType) => void) => {
 	return useQuery({
 		queryKey: ["account-me"],
 		queryFn: () =>
@@ -30,14 +30,14 @@ export const useChangePasswordMutation = () => {
 	});
 };
 
-export const useGetAccountList = () => {
+export const useGetAccountListQuery = () => {
 	return useQuery({
 		queryKey: ["accounts"],
 		queryFn: accountApiRequest.list,
 	});
 };
 
-export const useGetAccount = ({
+export const useGetAccountQuery = ({
 	id,
 	enabled,
 }: {

@@ -22,7 +22,7 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
 import {
-	useGetAccount,
+	useGetAccountQuery,
 	useUpdateAccountMutation,
 } from "../../../queries/useAccount";
 import { toast } from "../../../components/ui/use-toast";
@@ -40,7 +40,7 @@ export default function EditEmployee({
 }) {
 	const [file, setFile] = useState<File | null>(null);
 	const avatarInputRef = useRef<HTMLInputElement | null>(null);
-	const { data } = useGetAccount({ id: id as number, enabled: Boolean(id) });
+	const { data } = useGetAccountQuery({ id: id as number, enabled: Boolean(id) });
 	const updateAccountMutation = useUpdateAccountMutation();
 	const uploadMediaMutation = useUploadMediaMutation();
 	const form = useForm<UpdateEmployeeAccountBodyType>({
