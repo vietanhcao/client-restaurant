@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const privatePaths = ["/manage"];
-const unAuthPaths = ["/logout"];
+const unAuthPaths = ["/logout", "/login"];
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
@@ -40,5 +40,5 @@ export function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-	matcher: ["/manage/:path*", "/logout"],
+	matcher: ["/manage/:path*", "/logout", "/login"],
 };
