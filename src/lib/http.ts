@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { LoginResType } from "../schemaValidations/auth.schema";
-import { normalizePath } from "./utils";
+import { getAccessTokenFromLocalStorage, normalizePath, removeTokensFromLocalStorage, setAccessTokenFromLocalStorage, setRefreshTokenFromLocalStorage } from "./utils";
 import envConfig from "../config";
 
 type CustomOptions = Omit<RequestInit, "method"> & {
@@ -77,7 +77,7 @@ const request = async <Response>(
 	} = body instanceof FormData ? {} : { "Content-Type": "application/json" };
 
 	if (isClient) {
-		const accessToken = localStorage.getItem("accessToken");
+		const accessToken = getAccessTokenFromLocalStorage();
 		if (accessToken) {
 			baseHeader.Authorization = `Bearer ${accessToken}`;
 		}
@@ -139,8 +139,7 @@ const request = async <Response>(
 						await clientLogoutRequest;
 					} catch (error) {
 					} finally {
-						localStorage.removeItem("accessToken");
-						localStorage.removeItem("refreshToken");
+						removeTokensFromLocalStorage();
 						clientLogoutRequest = null;
 						// Redirect về trang login có thể dẫn đến loop vô hạn
 						// Nếu không xử lý đúng cách
@@ -165,14 +164,13 @@ const request = async <Response>(
 	// đảm bảo url chạy ở client side
 	if (isClient) {
 		const normalizeUrl = normalizePath(url);
-		if (normalizeUrl === "api/auth/login") {
+		if (["api/auth/login", "api/guest/auth/login"].includes(normalizeUrl)) {
 			const { accessToken, refreshToken } = (payload as LoginResType).data;
-			localStorage.setItem("accessToken", accessToken);
-			localStorage.setItem("refreshToken", refreshToken);
+			setAccessTokenFromLocalStorage(accessToken);
+			setRefreshTokenFromLocalStorage(refreshToken);
 		}
-		if (normalizeUrl === "api/auth/logout") {
-			localStorage.removeItem("accessToken");
-			localStorage.removeItem("refreshToken");
+		if (["api/auth/logout", "api/guest/auth/logout"].includes(normalizeUrl)) {
+			removeTokensFromLocalStorage();
 		}
 	}
 

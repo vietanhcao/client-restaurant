@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import guestApiRequest from "../../../../../apiRequests/guest";
 import { HttpError } from "../../../../../lib/http";
+import { decodeToken } from "../../../../../lib/utils";
 
 export async function POST(request: Request) {
 	const cookieStore = cookies();
@@ -15,12 +16,8 @@ export async function POST(request: Request) {
 			refreshToken,
 		});
 
-		const decodedAccessToken = jwt.decode(payload.data.accessToken) as {
-			exp: number;
-		};
-		const decodedRefreshToken = jwt.decode(payload.data.refreshToken) as {
-			exp: number;
-		};
+		const decodedAccessToken = decodeToken(payload.data.accessToken)
+		const decodedRefreshToken = decodeToken(payload.data.refreshToken)
 
 		cookieStore.set("accessToken", payload.data.accessToken, {
 			path: "/",

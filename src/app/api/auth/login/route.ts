@@ -3,6 +3,7 @@ import { LoginBodyType } from "../../../../schemaValidations/auth.schema";
 import authApiRequest from "../../../../apiRequests/auth";
 import jwt from "jsonwebtoken";
 import { HttpError } from "../../../../lib/http";
+import { decodeToken } from "../../../../lib/utils";
 
 export async function POST(request: Request) {
 	const body = (await request.json()) as LoginBodyType;
@@ -11,8 +12,8 @@ export async function POST(request: Request) {
 		const { payload } = await authApiRequest.sLogin(body);
 		const { accessToken, refreshToken } = payload.data;
 
-		const decodedAccessToken = jwt.decode(accessToken) as { exp: number };
-		const decodedRefreshToken = jwt.decode(refreshToken) as { exp: number };
+		const decodedAccessToken = decodeToken(accessToken)
+		const decodedRefreshToken = decodeToken(refreshToken)
 
 		cookieStore.set("accessToken", accessToken, {
 			path: "/",

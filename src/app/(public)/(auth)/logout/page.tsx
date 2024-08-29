@@ -11,7 +11,7 @@ import { useAppConext } from "../../../../components/app-provider";
 
 function Logout() {
 	const { mutateAsync } = useLogoutMutation();
-	const { setIsAuth } = useAppConext();
+	const { setRole } = useAppConext();
 	const searchParams = useSearchParams();
 	const refreshToken = searchParams.get("refreshToken");
 	const accessToken = searchParams.get("accessToken");
@@ -36,10 +36,10 @@ function Logout() {
 			setTimeout(() => {
 				ref.current = null;
 			}, 1000);
-			setIsAuth(false);
+			setRole(undefined);
 			router.push("/login");
 		});
-	}, [accessToken, mutateAsync, refreshToken, router, setIsAuth]);
+	}, [accessToken, mutateAsync, refreshToken, router, setRole]);
 
 	return (
 		<div className="min-h-screen flex items-center justify-center">

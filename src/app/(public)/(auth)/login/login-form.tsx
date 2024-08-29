@@ -28,7 +28,7 @@ export default function LoginForm() {
 	const route = useRouter();
 	const searchParams = useSearchParams();
 	const clearTokens = searchParams.get("clearTokens");
-	const { setIsAuth } = useAppConext();
+	const { setRole } = useAppConext();
 
 	const form = useForm<LoginBodyType>({
 		resolver: zodResolver(LoginBody),
@@ -40,9 +40,9 @@ export default function LoginForm() {
 
 	useEffect(() => {
 		if (clearTokens) {
-			setIsAuth(false);
+			setRole(undefined);
 		}
-	}, [clearTokens, setIsAuth]);
+	}, [clearTokens, setRole]);
 
 	const onSubmit = async (data: LoginBodyType) => {
 		if (loginMutation.isPending) return;
@@ -53,7 +53,7 @@ export default function LoginForm() {
 				title: "Đăng nhập thành công",
 				description: res.payload.message,
 			});
-			setIsAuth(true);
+			setRole(res.payload.data.account.role);
 			route.push("/manage/dashboard");
 		} catch (error) {
 			handleErrorApi({
