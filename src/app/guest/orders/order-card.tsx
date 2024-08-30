@@ -6,6 +6,7 @@ import { formatCurrency, getVietnameseOrderStatus } from "../../../lib/utils";
 import { Badge } from "../../../components/ui/badge";
 import socket from "../../../lib/socket";
 import { UpdateOrderResType } from "../../../schemaValidations/order.schema";
+import { toast } from "../../../components/ui/use-toast";
 
 export default function OrderCard() {
 	const { data, refetch } = useGuestOrderListQuery();
@@ -32,6 +33,11 @@ export default function OrderCard() {
 
 		function onUpdateOrder(data: UpdateOrderResType["data"]) {
 			console.log("Update order", data);
+			toast({
+				description: `Món ăn ${data.dishSnapshot.name} (SL: ${
+					data.quantity
+				}) đã được cập nhật thành "${getVietnameseOrderStatus(data.status)}"`,
+			});
 			refetch();
 		}
 
