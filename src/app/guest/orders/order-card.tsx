@@ -1,12 +1,14 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useGuestOrderListQuery } from "../../../queries/useGuest";
 import Image from "next/image";
 import { formatCurrency, getVietnameseOrderStatus } from "../../../lib/utils";
 import { Badge } from "../../../components/ui/badge";
+import socket from "../../../lib/socket";
+import { UpdateOrderResType } from "../../../schemaValidations/order.schema";
 
 export default function OrderCard() {
-	const { data } = useGuestOrderListQuery();
+	const { data, refetch } = useGuestOrderListQuery();
 	const orders = useMemo(() => data?.payload.data ?? [], [data]);
 
 	const totalPrice = useMemo(() => {
@@ -14,6 +16,36 @@ export default function OrderCard() {
 			return acc + item.dishSnapshot.price * item.quantity;
 		}, 0);
 	}, [orders]);
+
+	useEffect(() => {
+		if (socket.connected) {
+			onConnect();
+		}
+
+		function onConnect() {
+			console.log("Connected to socket", socket.id);
+		}
+
+		function onDisconnect() {
+			console.log("Disconnected from socket");
+		}
+
+		function onUpdateOrder(data: UpdateOrderResType["data"]) {
+			console.log("Update order", data);
+			refetch();
+		}
+
+		socket.on("update-order", onUpdateOrder);
+
+		socket.on("connect", onConnect);
+		socket.on("disconnect", onDisconnect);
+
+		return () => {
+			socket.off("connect", onConnect);
+			socket.off("disconnect", onDisconnect);
+		};
+	}, [refetch]);
+
 	return (
 		<>
 			{orders.map((order, index: number) => (
