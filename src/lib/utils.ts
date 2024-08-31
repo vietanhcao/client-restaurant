@@ -9,6 +9,8 @@ import envConfig from "../config";
 import { DishStatus, OrderStatus, Role, TableStatus } from "../constants/type";
 import { TokenPayload } from "../types/jwt.types";
 import guestApiRequest from "../apiRequests/guest";
+import { format } from "date-fns";
+import { BookX, CookingPot, HandCoins, Loader, Truck } from "lucide-react";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -194,21 +196,21 @@ export const simpleMatchText = (fullText: string, matchText: string) => {
 	);
 };
 
-// export const formatDateTimeToLocaleString = (date: string | Date) => {
-// 	return format(
-// 		date instanceof Date ? date : new Date(date),
-// 		"HH:mm:ss dd/MM/yyyy"
-// 	);
-// };
+export const formatDateTimeToLocaleString = (date: string | Date) => {
+	return format(
+		date instanceof Date ? date : new Date(date),
+		"HH:mm:ss dd/MM/yyyy"
+	);
+};
 
-// export const formatDateTimeToTimeString = (date: string | Date) => {
-// 	return format(date instanceof Date ? date : new Date(date), "HH:mm:ss");
-// };
+export const formatDateTimeToTimeString = (date: string | Date) => {
+	return format(date instanceof Date ? date : new Date(date), "HH:mm:ss");
+};
 
-// export const OrderStatusIcon = {
-// 	[OrderStatus.Pending]: Loader,
-// 	[OrderStatus.Processing]: CookingPot,
-// 	[OrderStatus.Rejected]: BookX,
-// 	[OrderStatus.Delivered]: Truck,
-// 	[OrderStatus.Paid]: HandCoins,
-// };
+export const OrderStatusIcon = {
+	[OrderStatus.Pending]: Loader,
+	[OrderStatus.Processing]: CookingPot,
+	[OrderStatus.Rejected]: BookX,
+	[OrderStatus.Delivered]: Truck,
+	[OrderStatus.Paid]: HandCoins,
+};
