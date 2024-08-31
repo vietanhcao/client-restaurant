@@ -196,14 +196,22 @@ export default function OrderTable() {
 		function onNewOrder(data: GuestCreateOrdersResType["data"]) {
 			const { guest } = data[0];
 			toast({
-				description: `${guest?.name} đã tạo đơn hàng mới`,
+				description: `${guest?.name} tại bàn ${guest?.tableNumber} đã tạo đơn hàng mới `,
+			});
+			refetch();
+		}
+
+		function onPayment(data: PayGuestOrdersResType["data"]) {
+			const { guest } = data[0];
+			toast({
+				description: `${guest?.name} tại bàn ${guest?.tableNumber} đã thanh toán cho đơn hàng`,
 			});
 			refetch();
 		}
 
 		socket.on("update-order", onUpdateOrder);
 		socket.on("new-order", onNewOrder);
-
+		socket.on("payment", onPayment);
 		socket.on("connect", onConnect);
 		socket.on("disconnect", onDisconnect);
 
@@ -212,6 +220,7 @@ export default function OrderTable() {
 			socket.off("disconnect", onDisconnect);
 			socket.off("update-order", onUpdateOrder);
 			socket.off("new-order", onNewOrder);
+			socket.off("payment", onPayment);
 		};
 	}, [fromDate, refetchOrderList, toDate]);
 

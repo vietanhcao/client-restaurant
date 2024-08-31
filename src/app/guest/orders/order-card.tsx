@@ -5,7 +5,7 @@ import Image from "next/image";
 import { formatCurrency, getVietnameseOrderStatus } from "../../../lib/utils";
 import { Badge } from "../../../components/ui/badge";
 import socket from "../../../lib/socket";
-import { UpdateOrderResType } from "../../../schemaValidations/order.schema";
+import { PayGuestOrdersResType, UpdateOrderResType } from "../../../schemaValidations/order.schema";
 import { toast } from "../../../components/ui/use-toast";
 import { OrderStatus } from "../../../constants/type";
 
@@ -65,9 +65,17 @@ export default function OrderCard() {
 			});
 			refetch();
 		}
+		
+		function onPayment(data: PayGuestOrdersResType["data"]) {
+			const { guest } = data[0];
+			toast({
+				description: `${guest?.name} tại bàn ${guest?.tableNumber} đã thanh toán cho đơn hàng`,
+			});
+			refetch();
+		}
 
 		socket.on("update-order", onUpdateOrder);
-
+		socket.on("payment", onPayment);
 		socket.on("connect", onConnect);
 		socket.on("disconnect", onDisconnect);
 
@@ -75,6 +83,7 @@ export default function OrderCard() {
 			socket.off("connect", onConnect);
 			socket.off("disconnect", onDisconnect);
 			socket.off("update-order", onUpdateOrder);
+			socket.off("payment", onPayment);
 		};
 	}, [refetch]);
 
