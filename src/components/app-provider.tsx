@@ -16,11 +16,13 @@ import {
 } from "../lib/utils";
 import { RoleType } from "../types/jwt.types";
 
+// stale time: default 0
+// gc: garbage collection time: default 5 minutes
+
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
 			refetchOnWindowFocus: false,
-			refetchOnMount: false,
 		},
 	},
 });

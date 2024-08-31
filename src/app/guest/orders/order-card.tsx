@@ -7,15 +7,40 @@ import { Badge } from "../../../components/ui/badge";
 import socket from "../../../lib/socket";
 import { UpdateOrderResType } from "../../../schemaValidations/order.schema";
 import { toast } from "../../../components/ui/use-toast";
+import { OrderStatus } from "../../../constants/type";
 
 export default function OrderCard() {
 	const { data, refetch } = useGuestOrderListQuery();
 	const orders = useMemo(() => data?.payload.data ?? [], [data]);
 
-	const totalPrice = useMemo(() => {
-		return orders.reduce((acc, item) => {
-			return acc + item.dishSnapshot.price * item.quantity;
-		}, 0);
+	const { waitingForPaying, paid } = useMemo(() => {
+		return orders.reduce(
+			(acc, item) => {
+				if (
+					item.status === OrderStatus.Pending ||
+					item.status === OrderStatus.Delivered ||
+					item.status === OrderStatus.Processing
+				) {
+					acc.waitingForPaying.quantity += item.quantity;
+					acc.waitingForPaying.price += item.dishSnapshot.price * item.quantity;
+				} else if (item.status === OrderStatus.Paid) {
+					acc.paid.quantity += item.quantity;
+					acc.paid.price += item.dishSnapshot.price * item.quantity;
+				}
+
+				return acc;
+			},
+			{
+				waitingForPaying: {
+					price: 0,
+					quantity: 0,
+				},
+				paid: {
+					price: 0,
+					quantity: 0,
+				},
+			}
+		);
 	}, [orders]);
 
 	useEffect(() => {
@@ -82,10 +107,18 @@ export default function OrderCard() {
 					</div>
 				</div>
 			))}
+			{paid.quantity !== 0 && (
+				<div className="sticky bottom-0 ">
+					<div className="w-full flex justify-between gap-4 text-xl font-semibold">
+						<span>Đơn chưa thanh toán · {waitingForPaying.quantity} món</span>
+						<span>{formatCurrency(waitingForPaying.price)}</span>
+					</div>
+				</div>
+			)}
 			<div className="sticky bottom-0 ">
 				<div className="w-full flex justify-between gap-4 text-xl font-semibold">
-					<span>Tổng cộng · {orders.length} món</span>
-					<span>{formatCurrency(totalPrice)}</span>
+					<span>Đơn đã thanh toán · {paid.quantity} món</span>
+					<span>{formatCurrency(paid.price)}</span>
 				</div>
 			</div>
 		</>
