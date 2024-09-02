@@ -60,7 +60,7 @@ const menuItems: {
 export default function NavItems({ className }: { className?: string }) {
 	const router = useRouter();
 	const logoutMutation = useLogoutMutation();
-	const { setRole, role } = useAppConext();
+	const { setRole, role, disconnectSocket } = useAppConext();
 
 	const handleLogout = async () => {
 		if (logoutMutation.isPending) return;
@@ -68,6 +68,7 @@ export default function NavItems({ className }: { className?: string }) {
 			await logoutMutation.mutateAsync();
 			router.push("/");
 			setRole(undefined);
+			disconnectSocket();
 		} catch (error) {
 			handleErrorApi({
 				error,
@@ -109,9 +110,7 @@ export default function NavItems({ className }: { className?: string }) {
 						</AlertDialogHeader>
 						<AlertDialogFooter>
 							<AlertDialogCancel>Thoát</AlertDialogCancel>
-							<AlertDialogAction onClick={handleLogout}>
-								Ok
-							</AlertDialogAction>
+							<AlertDialogAction onClick={handleLogout}>Ok</AlertDialogAction>
 						</AlertDialogFooter>
 					</AlertDialogContent>
 				</AlertDialog>

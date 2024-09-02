@@ -6,15 +6,18 @@ import {
 	useCallback,
 	useContext,
 	useEffect,
+	useRef,
 	useState,
 } from "react";
 import RefreshToken from "./refresh-token";
 import {
 	decodeToken,
+	generateSocketInstance,
 	getAccessTokenFromLocalStorage,
 	removeTokensFromLocalStorage,
 } from "../lib/utils";
 import { RoleType } from "../types/jwt.types";
+import { Socket } from "socket.io-client";
 
 // stale time: default 0
 // gc: garbage collection time: default 5 minutes
@@ -31,6 +34,9 @@ const AppContext = createContext({
 	isAuth: false,
 	role: undefined as RoleType | undefined,
 	setRole: (role?: RoleType | undefined) => {},
+	socket: undefined as Socket | undefined,
+	setSocket: (socket?: Socket | undefined) => {},
+	disconnectSocket: () => {},
 });
 
 export const useAppConext = () => {
@@ -43,14 +49,26 @@ export const useAppConext = () => {
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
 	const [role, setRoleState] = useState<RoleType | undefined>();
+	const [socket, setSocket] = useState<Socket | undefined>();
+	const countRef = useRef(0);
 
 	useEffect(() => {
+		if (countRef.current > 0) {
+			return;
+		}
 		const accessToken = getAccessTokenFromLocalStorage();
 		if (accessToken) {
 			const { role } = decodeToken(accessToken);
 			setRoleState(role);
+			setSocket(generateSocketInstance(accessToken));
 		}
+		countRef.current++;
 	}, []);
+
+	const disconnectSocket = useCallback(() => {
+		socket?.disconnect();
+		setSocket(undefined);
+	}, [socket]);
 
 	const setRole = useCallback((role?: RoleType) => {
 		setRoleState(role);
@@ -62,7 +80,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 	const isAuth = !!role;
 
 	return (
-		<AppContext.Provider value={{ role, setRole, isAuth }}>
+		<AppContext.Provider
+			value={{ role, setRole, isAuth, socket, setSocket, disconnectSocket }}
+		>
 			<QueryClientProvider client={queryClient}>
 				{children}
 				<RefreshToken />

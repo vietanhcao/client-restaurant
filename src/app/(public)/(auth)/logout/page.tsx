@@ -11,7 +11,7 @@ import { useAppConext } from "../../../../components/app-provider";
 
 function Logout() {
 	const { mutateAsync } = useLogoutMutation();
-	const { setRole } = useAppConext();
+	const { setRole, disconnectSocket } = useAppConext();
 	const searchParams = useSearchParams();
 	const refreshToken = searchParams.get("refreshToken");
 	const accessToken = searchParams.get("accessToken");
@@ -37,9 +37,17 @@ function Logout() {
 				ref.current = null;
 			}, 1000);
 			setRole(undefined);
+			disconnectSocket();
 			router.push("/login");
 		});
-	}, [accessToken, mutateAsync, refreshToken, router, setRole]);
+	}, [
+		accessToken,
+		mutateAsync,
+		refreshToken,
+		router,
+		setRole,
+		disconnectSocket,
+	]);
 
 	return (
 		<div className="min-h-screen flex items-center justify-center">

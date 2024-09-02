@@ -20,7 +20,7 @@ export default function DropdownAvatar() {
 	const logoutMutation = useLogoutMutation();
 	const router = useRouter();
 	const { data } = useAccoutMeQuery();
-	const {setRole} = useAppConext();
+	const { setRole, disconnectSocket } = useAppConext();
 
 	const account = data?.payload.data;
 
@@ -30,6 +30,7 @@ export default function DropdownAvatar() {
 			await logoutMutation.mutateAsync();
 			router.push("/");
 			setRole(undefined);
+			disconnectSocket();
 		} catch (error) {
 			handleErrorApi({
 				error,

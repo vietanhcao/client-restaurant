@@ -16,19 +16,23 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLoginMutation } from "../../../../queries/useAuth";
 import { toast } from "../../../../components/ui/use-toast";
 import {
+	generateSocketInstance,
+	getAccessTokenFromLocalStorage,
 	handleErrorApi,
 	removeTokensFromLocalStorage,
 } from "../../../../lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useAppConext } from "../../../../components/app-provider";
+import { io } from "socket.io-client";
+import envConfig from "../../../../config";
 
 export default function LoginForm() {
 	const loginMutation = useLoginMutation();
 	const route = useRouter();
 	const searchParams = useSearchParams();
 	const clearTokens = searchParams.get("clearTokens");
-	const { setRole } = useAppConext();
+	const { setRole, setSocket } = useAppConext();
 
 	const form = useForm<LoginBodyType>({
 		resolver: zodResolver(LoginBody),
@@ -54,6 +58,7 @@ export default function LoginForm() {
 				description: res.payload.message,
 			});
 			setRole(res.payload.data.account.role);
+			setSocket(generateSocketInstance(res.payload.data.accessToken));
 			route.push("/manage/dashboard");
 		} catch (error) {
 			handleErrorApi({

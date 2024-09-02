@@ -58,7 +58,7 @@ import {
 	useUpdateOrderMutation,
 } from "../../../queries/useOrder";
 import { useGetTableListQuery } from "../../../queries/useTable";
-import socket from "../../../lib/socket";
+import { useAppConext } from "../../../components/app-provider";
 
 export const OrderTableContext = createContext({
 	setOrderIdEdit: (value: number | undefined) => {},
@@ -88,6 +88,7 @@ const initFromDate = startOfDay(new Date());
 const initToDate = endOfDay(new Date());
 export default function OrderTable() {
 	const searchParam = useSearchParams();
+	const { socket } = useAppConext();
 	const [openStatusFilter, setOpenStatusFilter] = useState(false);
 	const [fromDate, setFromDate] = useState(initFromDate);
 	const [toDate, setToDate] = useState(initToDate);
@@ -165,12 +166,13 @@ export default function OrderTable() {
 	};
 
 	useEffect(() => {
+		if (!socket) return;
 		if (socket.connected) {
 			onConnect();
 		}
 
 		function onConnect() {
-			console.log("Connected to socket", socket.id);
+			console.log("Connected to socket", socket?.id);
 		}
 
 		function onDisconnect() {
@@ -222,7 +224,7 @@ export default function OrderTable() {
 			socket.off("new-order", onNewOrder);
 			socket.off("payment", onPayment);
 		};
-	}, [fromDate, refetchOrderList, toDate]);
+	}, [fromDate, refetchOrderList, toDate, socket]);
 
 	return (
 		<OrderTableContext.Provider

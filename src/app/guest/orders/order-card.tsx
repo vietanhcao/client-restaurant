@@ -1,16 +1,20 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
-import { useGuestOrderListQuery } from "../../../queries/useGuest";
 import Image from "next/image";
-import { formatCurrency, getVietnameseOrderStatus } from "../../../lib/utils";
+import { useEffect, useMemo } from "react";
+import { useAppConext } from "../../../components/app-provider";
 import { Badge } from "../../../components/ui/badge";
-import socket from "../../../lib/socket";
-import { PayGuestOrdersResType, UpdateOrderResType } from "../../../schemaValidations/order.schema";
 import { toast } from "../../../components/ui/use-toast";
 import { OrderStatus } from "../../../constants/type";
+import { formatCurrency, getVietnameseOrderStatus } from "../../../lib/utils";
+import { useGuestOrderListQuery } from "../../../queries/useGuest";
+import {
+	PayGuestOrdersResType,
+	UpdateOrderResType,
+} from "../../../schemaValidations/order.schema";
 
 export default function OrderCard() {
 	const { data, refetch } = useGuestOrderListQuery();
+	const { socket } = useAppConext();
 	const orders = useMemo(() => data?.payload.data ?? [], [data]);
 
 	const { waitingForPaying, paid } = useMemo(() => {
@@ -44,12 +48,13 @@ export default function OrderCard() {
 	}, [orders]);
 
 	useEffect(() => {
+		if (!socket) return;
 		if (socket.connected) {
 			onConnect();
 		}
 
 		function onConnect() {
-			console.log("Connected to socket", socket.id);
+			console.log("Connected to socket", socket?.id);
 		}
 
 		function onDisconnect() {
@@ -65,7 +70,7 @@ export default function OrderCard() {
 			});
 			refetch();
 		}
-		
+
 		function onPayment(data: PayGuestOrdersResType["data"]) {
 			const { guest } = data[0];
 			toast({
@@ -85,7 +90,7 @@ export default function OrderCard() {
 			socket.off("update-order", onUpdateOrder);
 			socket.off("payment", onPayment);
 		};
-	}, [refetch]);
+	}, [refetch, socket]);
 
 	return (
 		<>

@@ -1,13 +1,19 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { decodeToken } from "./lib/utils";
 import { Role } from "./constants/type";
+import jwt from "jsonwebtoken";
+import { TokenPayload } from "./types/jwt.types";
 
 const managePaths = ["/manage"];
 const guestPaths = ["/guest"];
 const onlyOwnerPaths = ["/manage/accounts"];
 const privatePaths = [...managePaths, ...guestPaths];
 const unAuthPaths = ["/login", "/logout"];
+
+// just use for middleware
+const decodeToken = (token: string) => {
+	return jwt.decode(token) as TokenPayload;
+};
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {

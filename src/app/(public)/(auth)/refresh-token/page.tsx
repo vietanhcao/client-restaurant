@@ -6,6 +6,7 @@ import {
 	checkAndRefreshToken,
 	getRefreshTokenFromLocalStorage,
 } from "../../../../lib/utils";
+import { useAppConext } from "../../../../components/app-provider";
 
 function RefreshToken() {
 	const searchParams = useSearchParams();
@@ -13,12 +14,14 @@ function RefreshToken() {
 	const redirectPath = searchParams.get("redirect");
 	const router = useRouter();
 	const ref = useRef<any>(null);
+	const { disconnectSocket } = useAppConext();
 	useEffect(() => {
 		if (ref.current) {
 			return;
 		}
 		if (refreshToken !== getRefreshTokenFromLocalStorage()) {
 			router.push("/login");
+			disconnectSocket()
 			return;
 		}
 		ref.current = checkAndRefreshToken;
@@ -30,10 +33,11 @@ function RefreshToken() {
 			onError: () => {
 				// trường hợp 404
 				ref.current = null;
+				disconnectSocket()
 				router.push("/login");
 			},
 		});
-	}, [redirectPath, refreshToken, router]);
+	}, [redirectPath, refreshToken, router, disconnectSocket]);
 
 	return (
 		<div className="min-h-screen flex items-center justify-center">
