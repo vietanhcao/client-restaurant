@@ -5,6 +5,7 @@ import { Role } from "./constants/type";
 
 const managePaths = ["/manage"];
 const guestPaths = ["/guest"];
+const onlyOwnerPaths = ["/manage/accounts"];
 const privatePaths = [...managePaths, ...guestPaths];
 const unAuthPaths = ["/login", "/logout"];
 
@@ -51,7 +52,11 @@ export function middleware(request: NextRequest) {
 			role !== Role.Guest &&
 			guestPaths.some((path) => pathname.startsWith(path));
 
-		if (isGuestGoToManage || isNotGuestGoToGuest) {
+		const isNotOwnerGoToOwner =
+			role !== Role.Owner &&
+			onlyOwnerPaths.some((path) => pathname.startsWith(path));
+
+		if (isGuestGoToManage || isNotGuestGoToGuest || isNotOwnerGoToOwner) {
 			return NextResponse.redirect(new URL("/", request.url));
 		}
 	}
