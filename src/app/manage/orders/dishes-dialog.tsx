@@ -213,13 +213,17 @@ export function DishesDialog({
 								<strong>{table.getPaginationRowModel().rows.length}</strong>{" "}
 								trong <strong>{data.length}</strong> kết quả
 							</div>
-							<div>
-								<AutoPagination
-									page={table.getState().pagination.pageIndex + 1}
-									pageSize={table.getPageCount()}
-									pathname="/manage/dishes"
-								/>
-							</div>
+							<AutoPagination
+								isLink={false}
+								page={table.getState().pagination.pageIndex + 1}
+								pageSize={table.getPageCount()}
+								onClick={(page) => {
+									table.setPagination({
+										pageIndex: page - 1,
+										pageSize: PAGE_SIZE,
+									});
+								}}
+							/>
 						</div>
 					</div>
 				</div>
