@@ -7,8 +7,10 @@ import DarkModeToggle from "../../components/dark-mode-toggle";
 
 export default function Layout({
 	children,
+	version
 }: Readonly<{
 	children: React.ReactNode;
+	version: React.ReactNode;
 }>) {
 	return (
 		<div className="flex min-h-screen w-full flex-col relative">
@@ -54,6 +56,8 @@ export default function Layout({
 			</header>
 			<main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
 				{children}
+				{/* parallel route */}
+				{version}
 			</main>
 		</div>
 	);
