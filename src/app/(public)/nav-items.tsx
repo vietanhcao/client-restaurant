@@ -7,7 +7,7 @@ import {
 	handleErrorApi,
 } from "../../lib/utils";
 import { use, useEffect, useState } from "react";
-import { useAppConext } from "../../components/app-provider";
+import useAppStore from "@/store/useAppStore";
 import { Role } from "../../constants/type";
 import { RoleType } from "../../types/jwt.types";
 import { useLogoutMutation } from "../../queries/useAuth";
@@ -60,7 +60,7 @@ const menuItems: {
 export default function NavItems({ className }: { className?: string }) {
 	const router = useRouter();
 	const logoutMutation = useLogoutMutation();
-	const { setRole, role, disconnectSocket } = useAppConext();
+	const { setRole, role, disconnectSocket } = useAppStore();
 
 	const handleLogout = async () => {
 		if (logoutMutation.isPending) return;

@@ -10,11 +10,11 @@ import { cn } from "@/lib/utils";
 import { Package2, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAppConext } from "../../components/app-provider";
+import useAppStore from "@/store/useAppStore";
 
 export default function NavLinks() {
 	const pathname = usePathname();
-	const { role } = useAppConext();
+	const { role } = useAppStore();
 
 	return (
 		<TooltipProvider>

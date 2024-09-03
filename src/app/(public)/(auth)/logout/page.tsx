@@ -7,11 +7,11 @@ import {
 	getAccessTokenFromLocalStorage,
 	getRefreshTokenFromLocalStorage,
 } from "../../../../lib/utils";
-import { useAppConext } from "../../../../components/app-provider";
+import useAppStore from "@/store/useAppStore";
 
 function Logout() {
 	const { mutateAsync } = useLogoutMutation();
-	const { setRole, disconnectSocket } = useAppConext();
+	const { setRole, disconnectSocket } = useAppStore();
 	const searchParams = useSearchParams();
 	const refreshToken = searchParams.get("refreshToken");
 	const accessToken = searchParams.get("accessToken");

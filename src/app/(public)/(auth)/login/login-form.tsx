@@ -1,4 +1,5 @@
 "use client";
+import useAppStore from "@/store/useAppStore";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -7,32 +8,24 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLoginMutation } from "../../../../queries/useAuth";
-import { toast } from "../../../../components/ui/use-toast";
-import {
-	generateSocketInstance,
-	getAccessTokenFromLocalStorage,
-	handleErrorApi,
-	removeTokensFromLocalStorage,
-} from "../../../../lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { useAppConext } from "../../../../components/app-provider";
-import { io } from "socket.io-client";
-import envConfig from "../../../../config";
+import { useForm } from "react-hook-form";
+import { toast } from "../../../../components/ui/use-toast";
+import { generateSocketInstance, handleErrorApi } from "../../../../lib/utils";
+import { useLoginMutation } from "../../../../queries/useAuth";
 
 export default function LoginForm() {
 	const loginMutation = useLoginMutation();
 	const route = useRouter();
 	const searchParams = useSearchParams();
 	const clearTokens = searchParams.get("clearTokens");
-	const { setRole, setSocket } = useAppConext();
+	const { setRole, setSocket } = useAppStore();
 
 	const form = useForm<LoginBodyType>({
 		resolver: zodResolver(LoginBody),

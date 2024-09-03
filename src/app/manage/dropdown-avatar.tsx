@@ -14,13 +14,13 @@ import { useLogoutMutation } from "../../queries/useAuth";
 import { handleErrorApi } from "../../lib/utils";
 import { useRouter } from "next/navigation";
 import { useAccoutMeQuery } from "../../queries/useAccount";
-import { useAppConext } from "../../components/app-provider";
+import useAppStore from "@/store/useAppStore";
 
 export default function DropdownAvatar() {
 	const logoutMutation = useLogoutMutation();
 	const router = useRouter();
 	const { data } = useAccoutMeQuery();
-	const { setRole, disconnectSocket } = useAppConext();
+	const { setRole, disconnectSocket } = useAppStore();
 
 	const account = data?.payload.data;
 

@@ -58,7 +58,7 @@ import {
 	useUpdateOrderMutation,
 } from "../../../queries/useOrder";
 import { useGetTableListQuery } from "../../../queries/useTable";
-import { useAppConext } from "../../../components/app-provider";
+import useAppStore from "@/store/useAppStore";
 
 export const OrderTableContext = createContext({
 	setOrderIdEdit: (value: number | undefined) => {},
@@ -88,7 +88,7 @@ const initFromDate = startOfDay(new Date());
 const initToDate = endOfDay(new Date());
 export default function OrderTable() {
 	const searchParam = useSearchParams();
-	const { socket } = useAppConext();
+	const { socket } = useAppStore();
 	const [openStatusFilter, setOpenStatusFilter] = useState(false);
 	const [fromDate, setFromDate] = useState(initFromDate);
 	const [toDate, setToDate] = useState(initToDate);

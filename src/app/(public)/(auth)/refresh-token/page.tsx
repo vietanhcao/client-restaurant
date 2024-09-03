@@ -6,7 +6,7 @@ import {
 	checkAndRefreshToken,
 	getRefreshTokenFromLocalStorage,
 } from "../../../../lib/utils";
-import { useAppConext } from "../../../../components/app-provider";
+import useAppStore from "@/store/useAppStore";
 
 function RefreshToken() {
 	const searchParams = useSearchParams();
@@ -14,7 +14,7 @@ function RefreshToken() {
 	const redirectPath = searchParams.get("redirect");
 	const router = useRouter();
 	const ref = useRef<any>(null);
-	const { disconnectSocket } = useAppConext();
+	const { disconnectSocket } = useAppStore();
 	useEffect(() => {
 		if (ref.current) {
 			return;

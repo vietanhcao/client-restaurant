@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useMemo } from "react";
-import { useAppConext } from "../../../components/app-provider";
+import useAppStore from "@/store/useAppStore";
 import { Badge } from "../../../components/ui/badge";
 import { toast } from "../../../components/ui/use-toast";
 import { OrderStatus } from "../../../constants/type";
@@ -14,7 +14,7 @@ import {
 
 export default function OrderCard() {
 	const { data, refetch } = useGuestOrderListQuery();
-	const { socket } = useAppConext();
+	const { socket } = useAppStore();
 	const orders = useMemo(() => data?.payload.data ?? [], [data]);
 
 	const { waitingForPaying, paid } = useMemo(() => {
