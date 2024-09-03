@@ -19,8 +19,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "../../../../components/ui/use-toast";
 import { generateSocketInstance, handleErrorApi } from "../../../../lib/utils";
 import { useLoginMutation } from "../../../../queries/useAuth";
+import { useTranslations } from "next-intl";
 
 export default function LoginForm() {
+	const t = useTranslations("Login");
 	const loginMutation = useLoginMutation();
 	const route = useRouter();
 	const searchParams = useSearchParams();
@@ -64,7 +66,7 @@ export default function LoginForm() {
 	return (
 		<Card className="mx-auto max-w-sm">
 			<CardHeader>
-				<CardTitle className="text-2xl">Đăng nhập</CardTitle>
+				<CardTitle className="text-2xl">{t('title')}</CardTitle>
 				<CardDescription>
 					Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống
 				</CardDescription>
