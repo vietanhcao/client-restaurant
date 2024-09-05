@@ -48,7 +48,6 @@ import {
 	getVietnameseTableStatus,
 	handleErrorApi,
 } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
 import AutoPagination from "@/components/auto-pagination";
 import { TableListResType } from "@/schemaValidations/table.schema";
 import EditTable from "@/app/[locale]/manage/tables/edit-table";
@@ -59,6 +58,7 @@ import {
 } from "../../../../queries/useTable";
 import QrcodeTable from "../../../../components/qrcode-table";
 import { toast } from "../../../../components/ui/use-toast";
+import { useSearchParams } from "next/navigation";
 
 type TableItem = TableListResType["data"][0];
 

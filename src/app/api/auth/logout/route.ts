@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
-import { LoginBodyType } from "../../../../../schemaValidations/auth.schema";
-import authApiRequest from "../../../../../apiRequests/auth";
+import { LoginBodyType } from "../../../../schemaValidations/auth.schema";
+import authApiRequest from "../../../../apiRequests/auth";
 import jwt from "jsonwebtoken";
-import { HttpError } from "../../../../../lib/http";
+import { HttpError } from "../../../../lib/http";
 
 export async function POST(request: Request) {
 	const cookieStore = cookies();

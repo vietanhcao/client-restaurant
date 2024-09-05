@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import guestApiRequest from "../../../../../../apiRequests/guest";
+import guestApiRequest from "../../../../../apiRequests/guest";
 
 export async function POST(request: Request) {
 	const cookieStore = cookies();

@@ -51,7 +51,6 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useSearchParams } from "next/navigation";
 import AutoPagination from "@/components/auto-pagination";
 import {
 	useDeleteAccountMutation,
@@ -59,6 +58,7 @@ import {
 } from "../../../../queries/useAccount";
 import { toast } from "../../../../components/ui/use-toast";
 import { handleErrorApi } from "../../../../lib/utils";
+import { useSearchParams } from "next/navigation";
 
 type AccountItem = AccountListResType["data"][0];
 

@@ -8,7 +8,7 @@ import { useGetDishListQuery } from "../../../../queries/useDish";
 import { GuestCreateOrdersBodyType } from "../../../../schemaValidations/guest.schema";
 import Quantity from "./quantity";
 import { useGuestOrderMutation } from "../../../../queries/useGuest";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { DishStatus } from "../../../../constants/type";
 
 export default function MenuOrder() {

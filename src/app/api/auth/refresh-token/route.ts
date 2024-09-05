@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
-import authApiRequest from "../../../../../apiRequests/auth";
-import { HttpError } from "../../../../../lib/http";
-import { decodeToken } from "../../../../../lib/utils";
+import authApiRequest from "../../../../apiRequests/auth";
+import { HttpError } from "../../../../lib/http";
+import { decodeToken } from "../../../../lib/utils";
 
 export async function POST(request: Request) {
 	const cookieStore = cookies();

@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
-import guestApiRequest from "../../../../../../apiRequests/guest";
-import { HttpError } from "../../../../../../lib/http";
-import { decodeToken } from "../../../../../../lib/utils";
+import guestApiRequest from "../../../../../apiRequests/guest";
+import { HttpError } from "../../../../../lib/http";
+import { decodeToken } from "../../../../../lib/utils";
 
 export async function POST(request: Request) {
 	const cookieStore = cookies();

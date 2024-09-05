@@ -2,7 +2,7 @@ import Image from "next/image";
 import { DishListResType } from "../../../schemaValidations/dish.schema";
 import dishApiRequest from "../../../apiRequests/dish";
 import { formatCurrency, wrapServerApi } from "../../../lib/utils";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
 
 export default async function Home() {

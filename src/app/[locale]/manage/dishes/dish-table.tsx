@@ -50,7 +50,6 @@ import {
 	getVietnameseDishStatus,
 	handleErrorApi,
 } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
 import AutoPagination from "@/components/auto-pagination";
 import { DishListResType } from "@/schemaValidations/dish.schema";
 import EditDish from "@/app/[locale]/manage/dishes/edit-dish";
@@ -60,6 +59,7 @@ import {
 	useGetDishListQuery,
 } from "../../../../queries/useDish";
 import { toast } from "../../../../components/ui/use-toast";
+import { useSearchParams } from "next/navigation";
 
 type DishItem = DishListResType["data"][0];
 

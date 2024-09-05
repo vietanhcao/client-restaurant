@@ -1,6 +1,6 @@
 "use client";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 
 import React from "react";
 

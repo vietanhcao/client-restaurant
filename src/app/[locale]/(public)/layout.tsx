@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { Menu, Package2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";

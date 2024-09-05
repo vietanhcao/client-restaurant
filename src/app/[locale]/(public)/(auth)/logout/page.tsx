@@ -2,12 +2,13 @@
 
 import { Suspense, useEffect, useRef } from "react";
 import { useLogoutMutation } from "../../../../../queries/useAuth";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import {
 	getAccessTokenFromLocalStorage,
 	getRefreshTokenFromLocalStorage,
 } from "../../../../../lib/utils";
 import useAppStore from "@/store/useAppStore";
+import { useSearchParams } from "next/navigation";
 
 function Logout() {
 	const { mutateAsync } = useLogoutMutation();

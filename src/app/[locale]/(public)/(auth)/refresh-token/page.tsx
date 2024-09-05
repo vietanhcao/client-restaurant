@@ -1,12 +1,13 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { Suspense, useEffect, useRef } from "react";
 import {
 	checkAndRefreshToken,
 	getRefreshTokenFromLocalStorage,
 } from "../../../../../lib/utils";
 import useAppStore from "@/store/useAppStore";
+import { useSearchParams } from "next/navigation";
 
 function RefreshToken() {
 	const searchParams = useSearchParams();

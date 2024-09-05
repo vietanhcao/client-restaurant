@@ -1,17 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import {
-	cn,
-	getAccessTokenFromLocalStorage,
-	handleErrorApi,
-} from "../../../lib/utils";
-import { use, useEffect, useState } from "react";
-import useAppStore from "@/store/useAppStore";
-import { Role } from "../../../constants/type";
-import { RoleType } from "../../../types/jwt.types";
-import { useLogoutMutation } from "../../../queries/useAuth";
-import { useRouter } from "next/navigation";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -23,7 +11,13 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
+import useAppStore from "@/store/useAppStore";
+import { useRouter } from "@/i18n/routing";
+import { Role } from "../../../constants/type";
+import { cn, handleErrorApi } from "../../../lib/utils";
+import { useLogoutMutation } from "../../../queries/useAuth";
+import { RoleType } from "../../../types/jwt.types";
 
 const menuItems: {
 	title: string;

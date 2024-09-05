@@ -1,8 +1,13 @@
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/routing";
 import { LoginResType } from "../schemaValidations/auth.schema";
-import { getAccessTokenFromLocalStorage, normalizePath, removeTokensFromLocalStorage, setAccessTokenFromLocalStorage, setRefreshTokenFromLocalStorage } from "./utils";
+import {
+	getAccessTokenFromLocalStorage,
+	normalizePath,
+	removeTokensFromLocalStorage,
+	setAccessTokenFromLocalStorage,
+	setRefreshTokenFromLocalStorage,
+} from "./utils";
 import envConfig from "../config";
-
 type CustomOptions = Omit<RequestInit, "method"> & {
 	baseUrl?: string;
 };

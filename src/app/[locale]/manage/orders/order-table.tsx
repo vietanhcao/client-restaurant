@@ -27,7 +27,6 @@ import {
 import AddOrder from "@/app/[locale]/manage/orders/add-order";
 import EditOrder from "@/app/[locale]/manage/orders/edit-order";
 import { createContext, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import AutoPagination from "@/components/auto-pagination";
 import { getVietnameseOrderStatus, handleErrorApi } from "@/lib/utils";
 import { OrderStatus, OrderStatusValues } from "@/constants/type";
@@ -59,6 +58,7 @@ import {
 } from "../../../../queries/useOrder";
 import { useGetTableListQuery } from "../../../../queries/useTable";
 import useAppStore from "@/store/useAppStore";
+import { useSearchParams } from "next/navigation";
 
 export const OrderTableContext = createContext({
 	setOrderIdEdit: (value: number | undefined) => {},

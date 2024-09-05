@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { Package2, Settings } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "@/i18n/routing";
+import { usePathname } from "@/i18n/routing";
 import useAppStore from "@/store/useAppStore";
 
 export default function NavLinks() {

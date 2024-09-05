@@ -4,7 +4,7 @@ import { Role } from "./constants/type";
 import jwt from "jsonwebtoken";
 import { TokenPayload } from "./types/jwt.types";
 import createMiddleware from "next-intl/middleware";
-import { locales } from "./config";
+import { defaultLocale, locales } from "./config";
 
 const managePaths = ["/vi/manage", "/en/manage"];
 const guestPaths = ["/vi/guest", "/en/guest"];
@@ -24,31 +24,35 @@ export function middleware(request: NextRequest) {
 		locales: locales,
 
 		// Used when no locale matches
-		defaultLocale: locales[1],
+		defaultLocale: defaultLocale,
 	});
 	const response = handleI18nRouting(request);
 
 	const { pathname } = request.nextUrl;
 	const accessToken = request.cookies.get("accessToken")?.value;
 	const refreshToken = request.cookies.get("refreshToken")?.value;
+	const locale = request.cookies.get("NEXT_LOCALE")?.value ?? defaultLocale;
 
 	// If the user is not authenticated
 	if (privatePaths.some((path) => pathname.startsWith(path)) && !refreshToken) {
-		const url = new URL("/login", request.url);
+		const url = new URL(`/${locale}/login`, request.url);
 		url.searchParams.set("clearTokens", "true");
-		response.headers.set("x-middleware-rewrite", url.toString());
-		return response;
+		return NextResponse.redirect(url);
+		// response.headers.set("x-middleware-rewrite", url.toString());
+		// return response;
 	}
 
 	// If the user is authenticated
 	if (refreshToken) {
 		// If the user tries to access a public page
 		if (unAuthPaths.some((path) => pathname.startsWith(path))) {
-			response.headers.set(
-				"x-middleware-rewrite",
-				new URL("/", request.url).toString()
-			);
-			return response;
+			const url = new URL(`/${locale}`, request.url);
+			return NextResponse.redirect(url);
+			// response.headers.set(
+			// 	"x-middleware-rewrite",
+			// 	new URL("/", request.url).toString()
+			// );
+			// return response;
 		}
 
 		//  If the user has accessToken expried and tries to access a private page
@@ -56,12 +60,13 @@ export function middleware(request: NextRequest) {
 			privatePaths.some((path) => pathname.startsWith(path)) &&
 			!accessToken
 		) {
-			const url = new URL("/refresh-token", request.url);
+			const url = new URL(`/${locale}/refresh-token`, request.url);
 			url.searchParams.set("refreshToken", refreshToken ?? "");
 			url.searchParams.set("redirect", pathname);
 
-			response.headers.set("x-middleware-rewrite", url.toString());
-			return response;
+			return NextResponse.redirect(url);
+			// response.headers.set("x-middleware-rewrite", url.toString());
+			// return response;
 		}
 
 		// If the user incorrect role
@@ -80,12 +85,13 @@ export function middleware(request: NextRequest) {
 			onlyOwnerPaths.some((path) => pathname.startsWith(path));
 
 		if (isGuestGoToManage || isNotGuestGoToGuest || isNotOwnerGoToOwner) {
-			// return NextResponse.redirect(new URL("/", request.url));
-			response.headers.set(
-				"x-middleware-rewrite",
-				new URL("/", request.url).toString()
-			);
-			return response;
+			const url = new URL(`/${locale}`, request.url);
+			return NextResponse.redirect(url);
+			// 	response.headers.set(
+			// 		"x-middleware-rewrite",
+			// 		new URL("/", request.url).toString()
+			// 	);
+			// 	return response;
 		}
 	}
 

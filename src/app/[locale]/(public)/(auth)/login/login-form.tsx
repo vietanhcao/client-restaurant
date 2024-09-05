@@ -13,13 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "../../../../../components/ui/use-toast";
 import { generateSocketInstance, handleErrorApi } from "../../../../../lib/utils";
 import { useLoginMutation } from "../../../../../queries/useAuth";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginForm() {
 	const t = useTranslations("Login");

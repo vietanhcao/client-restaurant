@@ -1,19 +1,19 @@
 import { cookies } from "next/headers";
+import { LoginBodyType } from "../../../../schemaValidations/auth.schema";
+import authApiRequest from "../../../../apiRequests/auth";
 import jwt from "jsonwebtoken";
-import { HttpError } from "../../../../../../lib/http";
-import { GuestLoginBodyType } from "../../../../../../schemaValidations/guest.schema";
-import guestApiRequest from "../../../../../../apiRequests/guest";
-import { decodeToken } from "../../../../../../lib/utils";
+import { HttpError } from "../../../../lib/http";
+import { decodeToken } from "../../../../lib/utils";
 
 export async function POST(request: Request) {
-	const body = (await request.json()) as GuestLoginBodyType;
+	const body = (await request.json()) as LoginBodyType;
 	const cookieStore = cookies();
 	try {
-		const { payload } = await guestApiRequest.sLogin(body);
+		const { payload } = await authApiRequest.sLogin(body);
 		const { accessToken, refreshToken } = payload.data;
 
-		const decodedAccessToken = decodeToken(accessToken);
-		const decodedRefreshToken = decodeToken(refreshToken);
+		const decodedAccessToken = decodeToken(accessToken)
+		const decodedRefreshToken = decodeToken(refreshToken)
 
 		cookieStore.set("accessToken", accessToken, {
 			path: "/",
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
 
 		return Response.json(payload);
 	} catch (error) {
-		console.log("🚀 ~ POST ~ error:", error);
+		console.log("🚀 ~ POST ~ error:", error)
 		if (error instanceof HttpError) {
 			return Response.json(error.payload, { status: error.status });
 		} else {
