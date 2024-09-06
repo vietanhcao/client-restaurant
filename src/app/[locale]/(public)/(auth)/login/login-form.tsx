@@ -17,17 +17,23 @@ import { useRouter } from "@/i18n/routing";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "../../../../../components/ui/use-toast";
-import { generateSocketInstance, handleErrorApi } from "../../../../../lib/utils";
+import {
+	generateSocketInstance,
+	handleErrorApi,
+} from "../../../../../lib/utils";
 import { useLoginMutation } from "../../../../../queries/useAuth";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
+import SearchParamsLoader, {
+	useSearchParamsLoader,
+} from "../../../../../components/search-params-loader";
 
 export default function LoginForm() {
 	const t = useTranslations("Login");
+	const { searchParams, setSearchParams } = useSearchParamsLoader();
 	const loginMutation = useLoginMutation();
 	const route = useRouter();
-	const searchParams = useSearchParams();
-	const clearTokens = searchParams.get("clearTokens");
+	const clearTokens = searchParams?.get("clearTokens");
 	const { setRole, setSocket } = useAppStore();
 
 	const form = useForm<LoginBodyType>({
@@ -66,8 +72,9 @@ export default function LoginForm() {
 
 	return (
 		<Card className="mx-auto max-w-sm">
+			<SearchParamsLoader onParamsReceived={setSearchParams} />
 			<CardHeader>
-				<CardTitle className="text-2xl">{t('title')}</CardTitle>
+				<CardTitle className="text-2xl">{t("title")}</CardTitle>
 				<CardDescription>
 					Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống
 				</CardDescription>

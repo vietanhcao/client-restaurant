@@ -3,9 +3,14 @@ import { DishListResType } from "../../../schemaValidations/dish.schema";
 import dishApiRequest from "../../../apiRequests/dish";
 import { formatCurrency, wrapServerApi } from "../../../lib/utils";
 import { Link } from "@/i18n/routing";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
-export default async function Home() {
+export default async function Home({
+	params: { locale },
+}: {
+	params: { locale: string };
+}) {
+	unstable_setRequestLocale(locale);
 	const t = await getTranslations("HomePage");
 
 	const res = await wrapServerApi(() => dishApiRequest.list());
