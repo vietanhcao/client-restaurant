@@ -7,6 +7,7 @@
 // is finished (e.g. form submission) and I don't want to block the UI w/
 // suspense, this is a good, childless way of hoisting the params back up to the
 // parent component that needs them in a non-UI blocking way
+// https://github.com/vercel/next.js/discussions/61654
 
 import { type ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect } from "react";
