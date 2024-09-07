@@ -1,7 +1,11 @@
 import Image from "next/image";
 import { DishListResType } from "../../../schemaValidations/dish.schema";
 import dishApiRequest from "../../../apiRequests/dish";
-import { formatCurrency, wrapServerApi } from "../../../lib/utils";
+import {
+	formatCurrency,
+	generateSlugUrl,
+	wrapServerApi,
+} from "../../../lib/utils";
 import { Link } from "@/i18n/routing";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
@@ -51,7 +55,10 @@ export default async function Home({
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
 					{dishList.map((dish) => (
 						<Link
-							href={`/dishes/${dish.id}`}
+							href={`/dishes/${generateSlugUrl({
+								name: dish.name,
+								id: dish.id,
+							})}`}
 							className="flex gap-4 w"
 							key={dish.id}
 						>
